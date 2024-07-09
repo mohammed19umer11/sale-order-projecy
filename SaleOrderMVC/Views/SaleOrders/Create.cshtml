@@ -1,0 +1,70 @@
+﻿@model SaleOrderMVC.Models.SaleOrderVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>SaleOrder</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" id="saleOrderForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CustomerId" class="control-label"></label>
+                <select asp-for="CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label"></label>
+                <select asp-for="EmployeeId" class ="form-control" asp-items="ViewBag.EmployeeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderstatusId" class="control-label"></label>
+                <select asp-for="OrderstatusId" class ="form-control" asp-items="ViewBag.OrderstatusId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemId" class="control-label"></label>
+                <select asp-for="ItemId" class="form-control" asp-items="ViewBag.ItemId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemQty" class="control-label"></label>
+                <input asp-for="ItemQty" min="0"/>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(function () {
+            $('#saleOrderForm').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                console.info(formData)
+                $.ajax({
+                    url: '@Url.Action("Create", "SaleOrders")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) { 
+                        console.log(response)
+                        $("#maincontainer").html(response)
+                        //window.location.href = response.redirectUrl; 
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}
